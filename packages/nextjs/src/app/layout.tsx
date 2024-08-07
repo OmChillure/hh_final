@@ -1,63 +1,40 @@
-import "@rainbow-me/rainbowkit/styles.css";
-import { Metadata } from "next";
-import { Press_Start_2P } from "next/font/google";
-import { ScaffoldEthAppWithProviders } from "@/components/ScaffoldEthAppWithProviders";
-import { ThemeProvider } from "@/components/ThemeProvider";
 import "@/styles/globals.css";
-import { NextUIProvider } from "@nextui-org/system";
 
-const font = Press_Start_2P({ weight: ["400"], subsets: ["latin"] });
+import { Inter } from "next/font/google";
+import { ThemeProvider } from "@/components/theme-provider"
 
-const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
-  ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-  : `http://localhost:${process.env.PORT}`;
-const imageUrl = `${baseUrl}/thumbnail.jpg`;
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
 
-export const metadata: Metadata = {
-  metadataBase: new URL(baseUrl),
+export const metadata = {
   title: {
-    default: "TinyBid-Nillion App",
-    template: "%s | TinyBid-Nillion",
+    default: "",
+    template: "",
   },
-  description: "Built with 🏗 TinyBid-Nillion",
-  openGraph: {
-    title: {
-      default: "TinyBid-Nillion App",
-      template: "%s | TinyBid-Nillion",
-    },
-    description: "Built with 🏗 TinyBid-Nillion",
-    images: [
-      {
-        url: imageUrl,
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    images: [imageUrl],
-    title: {
-      default: "TinyBid-Nillion",
-      template: "%s | TinyBid-Nillion",
-    },
-    description: "Built with 🏗 TinyBid-Nillion",
-  },
-  icons: {
-    icon: [{ url: "/favicon.png", sizes: "32x32", type: "image/png" }],
-  },
+  description: "",
+  icons: [{ rel: "icon", url: "./logo.png" }],
 };
 
-const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html suppressHydrationWarning>
-      <body className={`${font.className} antialiased`}>
-        <NextUIProvider>
-          <ThemeProvider enableSystem>
-            <ScaffoldEthAppWithProviders>{children}</ScaffoldEthAppWithProviders>
-          </ThemeProvider>
-        </NextUIProvider>
-      </body>
-    </html>
+      <html lang="en">
+        <body className={`font-sans ${inter.variable}`}>
+          <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+              >
+              {/* <Header /> */}
+              {children}
+            </ThemeProvider> 
+          </body>
+      </html>
   );
-};
-
-export default ScaffoldEthApp;
+}
