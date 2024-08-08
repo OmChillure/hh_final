@@ -1,31 +1,36 @@
 from nada_dsl import *
 
 def nada_main():
-
     # declare Party
-    bidders = [Party(name="Bidder" + str(i)) for i in range(4)]
+    analysts = [Party(name="Analyst" + str(i)) for i in range(4)]
 
-    # gather bids from each bidder
-    bids: list[SecretInteger] = [SecretInteger(Input(name="bid_input" + str(i), party=bidders[i])) for i in range(4)]
+    # gather predictions from each analyst
+    predictions: list[SecretInteger] = [SecretInteger(Input(name="prediction_input" + str(i), party=analysts[i])) for i in range(4)]
 
     outputs: list[Output] = []
 
-    # find the winner
-    maxBid = (
-        (bids[0] > bids[1]).if_else(
-            (bids[0] > bids[2]).if_else(
-                (bids[0] > bids[3]).if_else(bids[0], bids[3]),
-                (bids[2] > bids[3]).if_else(bids[2], bids[3])
+    # calculate the sum of predictions
+    totalPrediction = predictions[0] + predictions[1] + predictions[2] + predictions[3]
+
+    # find the highest prediction without revealing individual predictions
+    maxPrediction = (
+        (predictions[0] > predictions[1]).if_else(
+            (predictions[0] > predictions[2]).if_else(
+                (predictions[0] > predictions[3]).if_else(predictions[0], predictions[3]),
+                (predictions[2] > predictions[3]).if_else(predictions[2], predictions[3])
             ),
-            (bids[1] > bids[2]).if_else(
-                (bids[1] > bids[3]).if_else(bids[1], bids[3]),
-                (bids[2] > bids[3]).if_else(bids[2], bids[3])
+            (predictions[1] > predictions[2]).if_else(
+                (predictions[1] > predictions[3]).if_else(predictions[1], predictions[3]),
+                (predictions[2] > predictions[3]).if_else(predictions[2], predictions[3])
             )
         )
     )
 
-    # output the winner
-    for i in range(len(bids)):
-        outputs.append(Output(bids[i] == maxBid, "isWin" + str(i), bidders[0]))
+    # output the total prediction
+    outputs.append(Output(totalPrediction, "totalPrediction", analysts[0]))
+
+    # output the highest prediction
+    for i in range(len(predictions)):
+        outputs.append(Output(predictions[i] == maxPrediction, "isMax" + str(i), analysts[0]))
 
     return outputs
