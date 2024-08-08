@@ -1,0 +1,22 @@
+---
+program: nft_bid
+inputs:
+  prediction_input0:
+    SecretInteger: "3"
+  prediction_input2:
+    SecretInteger: "3"
+  prediction_input1:
+    SecretInteger: "3"
+  prediction_input3:
+    SecretInteger: "3"
+expected_outputs:
+  isMax3:
+    SecretBoolean: true
+  isMax1:
+    SecretBoolean: true
+  isMax0:
+    SecretBoolean: true
+  totalPrediction:
+    SecretInteger: "3"
+  isMax2:
+    SecretBoolean: true
